@@ -3,47 +3,12 @@ import MUIDataTable from "mui-datatables";
 import { IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import './App.css';
+const axios = require('axios');
 
-const data = [{
-  "id": 1,
-  "name": "Rock",
-  "email": "rock@demo.com",
-  "designation": "Software Developer",
-},
-{
-  "id": 2,
-  "name": "Jone",
-  "email": "jone@demo.com",
-  "designation": "Java Developer",
-},
-{
-  "id": 3,
-  "name": "Tom",
-  "email": "Tom@demo.com",
-  "designation": "Frontend Developer",
-},
-{
-  "id": 4,
-  "name": "Robert",
-  "email": "robert@demo.com",
-  "designation": "Backend Developer",
-},
-{
-  "id": 5,
-  "name": "Zac",
-  "email": "zac@demo.com",
-  "designation": "Ios Developer",
-},
-{
-  "id": 6,
-  "name": "David",
-  "email": "david@demo.com",
-  "designation": "Android Developer",
-}]
 const COL_ID = { name: "id", label: "ID", options: { sort: true, filter: true } }
 const COL_NAME = { name: "name", label: "Name", options: { sort: true, filter: true } }
-const COL_EMAIL = { name: "email", label: "Email", options: { sort: true, filter: true } }
-const COL_DESIGNATION = { name: "designation", label: "Designation", options: { sort: true, filter: true } }
+const COL_SALARY = { name: "salary", label: "SALARY", options: { sort: true, filter: true } }
+const COL_AGE = { name: "age", label: "AGE", options: { sort: true, filter: true } }
 const COL_ACTIONS = (deleteItem) => ({
   name: "action", label: "Action", options: {
     sort: true, filter: true,
@@ -57,7 +22,7 @@ const COL_ACTIONS = (deleteItem) => ({
   }
 })
 
-const tableColumns = (deleteItem) => [COL_ID, COL_NAME, COL_EMAIL, COL_DESIGNATION, COL_ACTIONS(deleteItem)]
+const tableColumns = (deleteItem) => [COL_ID, COL_NAME, COL_SALARY, COL_AGE, COL_ACTIONS(deleteItem)]
 
 const OPTS = {
   selectableRows: false,
@@ -69,12 +34,33 @@ const OPTS = {
 
 class App extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: []
+    }
+  }
+
+  componentDidMount() {
+    axios.get('http://dummy.restapiexample.com/api/v1/employees')
+      .then(res => {
+        const data = res.data;
+        this.setState({
+          data,
+        });
+      }).catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+  }
+
   deleteItem = (id) => {
     console.log(id, "sadfasd");
   }
 
   render() {
-    const displayData = data.map((row, index) => [row.id, row.name, row.email, row.designation, {id:row.id}]);
+    const { data } = this.state;
+    const displayData = data.map((row, index) => [row.id, row.employee_name, row.employee_salary, row.employee_age, { id: row.id }]);
     return (
       <React.Fragment>
         <div className="App">
@@ -86,7 +72,7 @@ class App extends React.Component {
             options={OPTS}
           />
         </div>
-      </React.Fragment> 
+      </React.Fragment>
     );
   }
 }
