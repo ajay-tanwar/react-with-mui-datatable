@@ -15,7 +15,7 @@ const COL_ACTIONS = (deleteItem) => ({
     customBodyRender: (item) => {
       return (
         <React.Fragment>
-          <IconButton onClick={() => deleteItem(item.id)}><DeleteIcon /></IconButton>
+          <IconButton onClick={() => deleteItem(item.id, item.ind)}><DeleteIcon /></IconButton>
         </React.Fragment>
       );
     }
@@ -54,10 +54,12 @@ class App extends React.Component {
       });
   }
 
-  deleteItem = (id) => {
+  deleteItem = (id, index) => {
     axios.delete(`http://dummy.restapiexample.com/api/v1/delete/${id}`)
       .then(res => {
-        console.log(res);
+        let data = [...this.state.data];
+        data.splice(index, 1);
+        this.setState({ data });
       }).catch(function (error) {
         // handle error
         console.log(error);
@@ -66,7 +68,7 @@ class App extends React.Component {
 
   render() {
     const { data } = this.state;
-    const displayData = data.map((row, index) => [row.id, row.employee_name, row.employee_salary, row.employee_age, { id: row.id }]);
+    const displayData = data.map((row, index) => [row.id, row.employee_name, row.employee_salary, row.employee_age, { id: row.id, ind: index }]);
     return (
       <React.Fragment>
         <div className="App">
