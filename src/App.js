@@ -11,7 +11,7 @@ const COL_SALARY = { name: "salary", label: "SALARY", options: { sort: true, fil
 const COL_AGE = { name: "age", label: "AGE", options: { sort: true, filter: true } }
 const COL_ACTIONS = (deleteItem) => ({
   name: "action", label: "Action", options: {
-    sort: true, filter: true,
+    sort: false, filter: false,
     customBodyRender: (item) => {
       return (
         <React.Fragment>
