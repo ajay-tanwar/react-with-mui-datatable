@@ -55,7 +55,16 @@ class App extends React.Component {
   }
 
   deleteItem = (id) => {
-    console.log(id, "sadfasd");
+    axios.get(`http://dummy.restapiexample.com/api/v1/employee/${id}`)
+      .then(res => {
+        const data = res.data;
+        this.setState({
+          data,
+        });
+      }).catch(function (error) {
+        // handle error
+        console.log(error);
+      });
   }
 
   render() {
